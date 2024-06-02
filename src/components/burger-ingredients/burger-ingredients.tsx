@@ -1,14 +1,45 @@
 import { useState, useRef, useEffect, FC } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { TTabMode } from '@utils-types';
-import { BurgerIngredientsUI } from '../ui/burger-ingredients';
+import { TTabMode, TIngredient } from '@utils-types';
+import { BurgerIngredientsUI } from '@ui';
+
+import {
+  selectAllIngredients,
+  selectIngredientsLoading,
+  selectIngredientsLoaded
+} from '../../services/selectors/ingredients-selector';
+import { fetchIngredients } from '../../services/slices/ingredients-slice';
+
+import { useSelector, useDispatch } from '../../services/store';
 
 export const BurgerIngredients: FC = () => {
   /** TODO: взять переменные из стора */
-  const buns = [];
-  const mains = [];
-  const sauces = [];
+  //const buns: TIngredient[] = [];
+  //const mains: TIngredient[] = [];
+  //const sauces: TIngredient[] = [];
+
+  const ingredients: TIngredient[] = useSelector(selectAllIngredients);
+  const loaded = useSelector(selectIngredientsLoaded);
+  //const error = useSelector(selectFeedsError);
+  /**/
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!loaded) {
+      dispatch(fetchIngredients());
+    }
+  }, [loaded, dispatch]);
+  /**/
+  //console.log('BurgerIngredients:', ingredients);
+  const buns: TIngredient[] = ingredients.filter(
+    (item: TIngredient) => item.type === 'bun'
+  );
+  const mains: TIngredient[] = ingredients.filter(
+    (item: TIngredient) => item.type === 'main'
+  );
+  const sauces: TIngredient[] = ingredients.filter(
+    (item: TIngredient) => item.type === 'sauce'
+  );
 
   const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
   const titleBunRef = useRef<HTMLHeadingElement>(null);
@@ -47,7 +78,7 @@ export const BurgerIngredients: FC = () => {
       titleSaucesRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  return null;
+  //return null;
 
   return (
     <BurgerIngredientsUI

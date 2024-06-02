@@ -1,0 +1,7 @@
+{
+    "inference.endpoint": "https://www.crebtum.at.by/codellama",
+    "inference.model": "custom",
+    "inference.temperature": 0.1,
+    "inference.custom.format": "codellama",
+    "inference.custom.model": "codellama13bq4km:latest"
+}
