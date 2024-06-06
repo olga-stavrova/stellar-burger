@@ -5,38 +5,30 @@ import { TIngredient, TOrder } from '@utils-types';
 
 import { useParams } from 'react-router-dom';
 import { selectAllIngredients } from '../../services/selectors/ingredients-selector';
-import { selectUserOrders } from '../../services/selectors/order-selector';
-//import { selectFeedsOrders } from '../../services/selectors/feeds-selector';
+import { selectFeedsOrders } from '../../services/selectors/feeds-selector';
+import { selectFeedsLoaded } from '../../services/selectors/feeds-selector';
+import { fetchFeeds } from '../../services/slices/feeds-slice';
 import { useSelector, useDispatch } from '../../services/store';
 
 export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора */
-  /*
-  const orderData = {
-    createdAt: '',
-    ingredients: [],
-    _id: '',
-    status: '',
-    name: '',
-    updatedAt: 'string',
-    number: 0
-  };
-  */
   const { selectedId } = useParams();
+  const dispatch = useDispatch();
 
-  //const orders: TOrder[] = useSelector(selectFeedsOrders);
-  const orders = useSelector(selectUserOrders);
+  const orders: TOrder[] = useSelector(selectFeedsOrders);
+
+  const areFeedsLoaded = useSelector(selectFeedsLoaded);
+  useEffect(() => {
+    if (!areFeedsLoaded) {
+      dispatch(fetchFeeds());
+    }
+  }, [areFeedsLoaded, dispatch]);
 
   const orderData = orders?.find(
     (order: TOrder) => order.number.toString() === selectedId
   );
 
-  console.log('OrderInfo:', selectedId, orderData, orders);
-
-  //const ingredients: TIngredient[] = [];
   const ingredients: TIngredient[] = useSelector(selectAllIngredients);
 
-  /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {
     if (!orderData || !ingredients.length) return null;
 

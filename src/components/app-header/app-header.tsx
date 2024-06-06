@@ -17,6 +17,6 @@ export const AppHeader: FC = () => {
       dispatch(getUser());
     }
   }, [isAuthChecked, dispatch]);
-  console.log('AppHeader:', user);
+
   return <AppHeaderUI userName={user ? user.name : ''} />;
 };

@@ -8,7 +8,7 @@ interface IngredientsState {
   loaded: boolean;
   error: string | null;
 }
-// Define the initial state of the ingredients slice
+
 const initialIngredientsState: IngredientsState = {
   items: [],
   loading: false,
@@ -16,7 +16,6 @@ const initialIngredientsState: IngredientsState = {
   error: null
 };
 
-// Create an async thunk for fetching ingredients
 export const fetchIngredients = createAsyncThunk(
   'ingredients/fetchIngredients',
   async (_, { rejectWithValue }) => {
@@ -29,7 +28,6 @@ export const fetchIngredients = createAsyncThunk(
   }
 );
 
-// Create the ingredients slice
 export const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState: initialIngredientsState,
@@ -57,5 +55,4 @@ export const ingredientsSlice = createSlice({
   }
 });
 
-// Export the reducer from the slice
 export default ingredientsSlice.reducer;

@@ -1,13 +1,9 @@
 import '../../index.css';
 import styles from './app.module.css';
-import { FC, useEffect } from 'react';
 import {
   BrowserRouter,
   Routes,
   Route,
-  Navigate,
-  Outlet,
-  useParams,
   useNavigate,
   useLocation
 } from 'react-router-dom';
@@ -27,48 +23,11 @@ import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { NotFound404 } from '@pages';
 import { Modal } from '../modal/modal';
 import { ProtectedRoute } from '../protected-route/protected-route';
-import {
-  selectIsAuthChecked,
-  selectGetUser
-} from '../../services/selectors/user-selector';
-import { getUser } from '../../services/slices/user-slice';
-import { selectIngredientsLoaded } from '../../services/selectors/ingredients-selector';
-import { selectFeedsLoaded } from '../../services/selectors/feeds-selector';
-import { fetchIngredients } from '../../services/slices/ingredients-slice';
-import { fetchFeeds } from '../../services/slices/feeds-slice';
-
-import { useSelector, useDispatch } from '../../services/store';
 
 const App1 = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const state = location.state;
-  const user = useSelector(selectGetUser);
-  const isAuthChecked = useSelector(selectIsAuthChecked);
-  console.log('App1:', user);
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (!isAuthChecked) {
-      dispatch(getUser());
-    }
-  }, [isAuthChecked, dispatch]);
-
-  const areIngredientsLoaded = useSelector(selectIngredientsLoaded);
-
-  useEffect(() => {
-    if (!areIngredientsLoaded) {
-      dispatch(fetchIngredients());
-    }
-  }, [areIngredientsLoaded, dispatch]);
-
-  const areFeedsLoaded = useSelector(selectFeedsLoaded);
-
-  useEffect(() => {
-    if (!areFeedsLoaded) {
-      dispatch(fetchFeeds());
-    }
-  }, [areFeedsLoaded, dispatch]);
 
   return (
     <div className={styles.app}>

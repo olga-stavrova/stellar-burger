@@ -74,7 +74,6 @@ export const orderSlice = createSlice({
   initialState,
   reducers: {
     addItem(state, action) {
-      console.log('addItem', action);
       if (action.payload.type === 'bun') {
         state.orderItems.bun = action.payload;
       } else {
@@ -82,7 +81,6 @@ export const orderSlice = createSlice({
       }
     },
     removeItem(state, action) {
-      console.log('removeItem', action);
       const index = state.orderItems.items.findIndex(
         (item) => item._id === action.payload.ingredient._id
       );
@@ -91,20 +89,15 @@ export const orderSlice = createSlice({
       }
     },
     moveItem(state, { payload }: PayloadAction<{ from: number; to: number }>) {
-      console.log('moveItem', payload);
       const { from, to } = payload;
       const items = [...state.orderItems.items];
       items.splice(to, 0, items.splice(from, 1)[0]);
       state.orderItems.items = items;
     },
     setBun(state, action) {
-      console.log('setBun', action);
       state.orderItems.bun = action.payload;
     },
     resetOrderData(state, action: PayloadAction<TOrder>) {
-      console.log('resetOrderData', action);
-      //state.userOrders?.push(action.payload);
-      //state.orderData && state.userOrders?.push(state.orderData);
       state.orderData = null;
       state.orderItems = initialState.orderItems;
     }
@@ -120,13 +113,11 @@ export const orderSlice = createSlice({
           state.userOrders = action.payload;
           state.isLoading = false;
           state.errorMessage = '';
-          console.log('getUserOrders.fulfilled', state.userOrders);
         }
       )
       .addCase(getUserOrders.rejected, (state, action) => {
         state.isLoading = false;
         state.errorMessage = action.payload as string;
-        console.log('getUserOrders.rejected', state.errorMessage);
       })
       .addCase(getOrderByNumber.pending, (state) => {
         state.isLoadingDetails = true;
@@ -137,7 +128,6 @@ export const orderSlice = createSlice({
           state.orderDetails = action.payload.orders[0];
           state.isLoadingDetails = false;
           state.errorMessage = '';
-          console.log('getOrderByNumber.fulfilled', state.orderDetails);
           state.isLoading = false;
           state.errorMessage = '';
         }
@@ -145,7 +135,6 @@ export const orderSlice = createSlice({
       .addCase(getOrderByNumber.rejected, (state, action) => {
         state.isLoadingDetails = false;
         state.errorMessage = action.payload as string;
-        console.log('getOrderByNumber.rejected', state.errorMessage);
       })
       .addCase(addUserOrder.pending, (state) => {
         state.orderRequest = true;
@@ -155,17 +144,14 @@ export const orderSlice = createSlice({
         (state, action: PayloadAction<TNewOrderResponse>) => {
           state.orderData = action.payload.order;
           state.userOrders?.push(state.orderData);
-          //state.orderItems = initialState.orderItems;
           state.orderRequest = false;
           state.errorMessage = '';
-          console.log('addUserOrder.fulfilled', state.orderData);
         }
       )
       .addCase(addUserOrder.rejected, (state, action) => {
         state.isLoading = false;
         state.orderRequest = false;
         state.errorMessage = action.payload as string;
-        console.log('addUserOrder.rejected', state.errorMessage);
       });
   }
 });

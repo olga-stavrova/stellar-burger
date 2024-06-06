@@ -6,7 +6,6 @@ import { BurgerIngredientsUI } from '@ui';
 
 import {
   selectAllIngredients,
-  selectIngredientsLoading,
   selectIngredientsLoaded
 } from '../../services/selectors/ingredients-selector';
 import { fetchIngredients } from '../../services/slices/ingredients-slice';
@@ -14,29 +13,24 @@ import { fetchIngredients } from '../../services/slices/ingredients-slice';
 import { useSelector, useDispatch } from '../../services/store';
 
 export const BurgerIngredients: FC = () => {
-  /** TODO: взять переменные из стора */
-  //const buns: TIngredient[] = [];
-  //const mains: TIngredient[] = [];
-  //const sauces: TIngredient[] = [];
-
   const ingredients: TIngredient[] = useSelector(selectAllIngredients);
   const areIngredientsLoaded = useSelector(selectIngredientsLoaded);
-  //const error = useSelector(selectFeedsError);
-  /**/
+
   const dispatch = useDispatch();
   useEffect(() => {
     if (!areIngredientsLoaded) {
       dispatch(fetchIngredients());
     }
   }, [areIngredientsLoaded, dispatch]);
-  /**/
-  //console.log('BurgerIngredients:', ingredients);
+
   const buns: TIngredient[] = ingredients.filter(
     (item: TIngredient) => item.type === 'bun'
   );
+
   const mains: TIngredient[] = ingredients.filter(
     (item: TIngredient) => item.type === 'main'
   );
+
   const sauces: TIngredient[] = ingredients.filter(
     (item: TIngredient) => item.type === 'sauce'
   );
@@ -77,8 +71,6 @@ export const BurgerIngredients: FC = () => {
     if (tab === 'sauce')
       titleSaucesRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
-
-  //return null;
 
   return (
     <BurgerIngredientsUI

@@ -1,4 +1,4 @@
-import { FC, SyntheticEvent, useState, useEffect } from 'react';
+import { FC, SyntheticEvent, useState } from 'react';
 import { LoginUI } from '@ui-pages';
 import { loginUser, getUser } from '../../services/slices/user-slice';
 import { selectUserErrorMessage } from '../../services/selectors/user-selector';
@@ -11,26 +11,15 @@ export const Login: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const errorMessage = useSelector(selectUserErrorMessage);
-  /*
-  useEffect(() => {
-    if (errorMessage) {
-      alert(errorMessage);
-    }
-  }, [errorMessage]);
-*/
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     dispatch(loginUser({ email, password })).then(() => {
       dispatch(getUser()).then(() => {
-        //navigate('/profile');
         navigate(-1);
       });
     });
-    //navigate(-1);
   };
-  console.log('Login:', errorMessage);
-  //errorText={errorMessage ? errorMessage : ''}
 
   return (
     <LoginUI

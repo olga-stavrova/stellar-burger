@@ -14,9 +14,6 @@ import { fetchIngredients } from '../../services/slices/ingredients-slice';
 import { useSelector, useDispatch } from '../../services/store';
 
 export const ConstructorPage: FC = () => {
-  /** TODO: взять переменную из стора */
-  //const isIngredientsLoading = false;
-
   const isIngredientsLoading = useSelector(selectIngredientsLoading);
 
   const loaded = useSelector(selectIngredientsLoaded);

@@ -1,7 +1,7 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { RegisterUI } from '@ui-pages';
 import { registerUser } from '../../services/slices/user-slice';
-import { useSelector, useDispatch } from '../../services/store';
+import { useDispatch } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
 
 export const Register: FC = () => {
@@ -17,7 +17,6 @@ export const Register: FC = () => {
       navigate(-1);
     });
   };
-  //navigate(-1);
 
   return (
     <RegisterUI

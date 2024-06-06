@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import React, { memo } from 'react';
 import styles from './order-details.module.css';
 import doneImg from '../../../images/done.svg';
 import { OrderDetailsUIProps } from './type';

@@ -8,8 +8,6 @@ import { selectAllIngredients } from '../../services/selectors/ingredients-selec
 
 import { useSelector } from '../../services/store';
 export const IngredientDetails: FC = () => {
-  /** TODO: взять переменную из стора */
-  //const ingredientData = null;
   const ingredients: TIngredient[] = useSelector(selectAllIngredients);
 
   const { selectedId } = useParams();
@@ -17,8 +15,6 @@ export const IngredientDetails: FC = () => {
   const ingredientData = ingredients.find(
     (ingredient) => ingredient._id === selectedId
   );
-
-  //console.log('IngredientDetails:', selectedId, ingredientData, ingredients);
 
   if (!ingredientData) {
     return <Preloader />;

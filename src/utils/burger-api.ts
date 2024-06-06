@@ -99,19 +99,6 @@ export const getOrdersApi = () =>
     return Promise.reject(data);
   });
 
-/*
-export const getOrdersApi = () =>
-  fetchWithRefresh<TOrdersResponse>(`${URL}/orders`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8',
-      authorization: getCookie('accessToken')
-    } as HeadersInit
-  }).then((data) => {
-    if (data?.success) return data;
-    return Promise.reject(data);
-  });
-*/
 export type TNewOrderResponse = TServerResponse<{
   order: TOrder;
   name: string;
@@ -244,7 +231,6 @@ export const logoutApi = () =>
     },
     body: JSON.stringify({
       token: localStorage.getItem('refreshToken'),
-      //token: getCookie('refreshToken'),
       authorization: getCookie('accessToken')
     })
   }).then((res) => checkResponse<TServerResponse<{}>>(res));

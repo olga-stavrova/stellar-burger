@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../../services/store';
 import {
   TLoginData,
   TRegisterData,
@@ -9,12 +8,10 @@ import {
   registerUserApi,
   getUserApi,
   updateUserApi,
-  logoutApi,
-  refreshToken
+  logoutApi
 } from '../../utils/burger-api';
 
 import { setCookie } from '../../utils/cookie';
-import { access } from 'fs';
 
 export interface UserState {
   auth: TAuthResponse | null;
@@ -34,7 +31,6 @@ const initialState: UserState = {
   isLoading: false
 };
 
-// Actions
 export const loginUser = createAsyncThunk(
   'user/loginUser',
   async (userData: TLoginData, { rejectWithValue }) => {
@@ -93,25 +89,7 @@ export const getUser = createAsyncThunk(
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    /*
-    resetUser: (state) => {
-      setCookie('accessToken', '');
-      //setCookie('refreshToken', '');
-      localStorage.setItem(
-        'refreshToken',
-        state.auth ? state.auth.refreshToken : ''
-      );
-      state.auth = null;
-      state.user = null;
-      state.accept = false;
-      state.isLoading = false;
-      state.error = false;
-      state.errorMessage = null;
-    }
-    */
-    // Other reducers can be added here
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
@@ -125,14 +103,12 @@ export const userSlice = createSlice({
           state.isLoading = false;
           state.error = false;
           state.errorMessage = null;
-          console.log('registerUser.fulfilled', state.auth);
         }
       )
       .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = true;
         state.errorMessage = action.payload as string;
-        console.log('registerUser.rejected', action, state.errorMessage);
       })
       .addCase(updateUser.pending, (state) => {
         state.isLoading = true;
@@ -145,14 +121,12 @@ export const userSlice = createSlice({
           state.isLoading = false;
           state.error = false;
           state.errorMessage = null;
-          console.log('updateUser.fulfilled', state.auth);
         }
       )
       .addCase(updateUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = true;
         state.errorMessage = action.payload as string;
-        console.log('updateUser.rejected', action, state.errorMessage);
       })
       .addCase(getUser.pending, (state) => {
         state.isLoading = true;
@@ -165,7 +139,6 @@ export const userSlice = createSlice({
           state.isLoading = false;
           state.error = false;
           state.errorMessage = null;
-          console.log('getUser.fulfilled', state.auth);
         }
       )
       .addCase(getUser.rejected, (state, action) => {
@@ -177,14 +150,8 @@ export const userSlice = createSlice({
           refreshToken: '',
           accessToken: ''
         };
-        //const { success, message }: { success?: boolean; message?: string } =
-        //  action.payload as { success?: boolean; message?: string };
-        //state.errorMessage = message ? message : 'Unknown error'; //action.payload as string;
-        //state.error = !success;
-        //state.errorMessage = (action.payload as string).toString();
         state.errorMessage = JSON.stringify(action.payload);
         state.error = true;
-        console.log('getUser.rejected', action, state.errorMessage);
       })
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
@@ -195,19 +162,16 @@ export const userSlice = createSlice({
           state.auth = action.payload;
           setCookie('accessToken', state.auth.accessToken);
           localStorage.setItem('refreshToken', state.auth.refreshToken);
-          //setCookie('refreshToken', state.auth.refreshToken);
           state.accept = true;
           state.isLoading = false;
           state.error = false;
           state.errorMessage = null;
-          console.log('loginUser.fulfilled', action, state.auth);
         }
       )
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = true;
         state.errorMessage = action.payload as string;
-        console.log('loginUser.rejected', action, state.errorMessage);
       })
       .addCase(logoutUser.pending, (state) => {
         state.isLoading = true;
@@ -221,16 +185,11 @@ export const userSlice = createSlice({
         state.errorMessage = null;
         setCookie('accessToken', '');
         localStorage.setItem('refreshToken', '');
-        console.log('logoutUser.fulfilled', action.payload);
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = true;
         state.errorMessage = action.payload as string;
-        console.log('logoutUser.rejected', state.errorMessage);
       });
-    // More cases for other async thunks
   }
 });
-//export const { resetUser } = userSlice.actions;
-//export default userSlice.reducer;

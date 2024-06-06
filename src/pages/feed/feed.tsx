@@ -3,46 +3,47 @@ import { useEffect } from 'react';
 import { FeedUI } from '@ui-pages';
 import { TOrder } from '@utils-types';
 import { FC } from 'react';
-//import { getFeedsApi } from '../../utils/burger-api';
 
-//import { TOrdersData } from '@utils-types';
-//import { useDispatch, useSelector } from 'react-redux';
-import { fetchFeeds } from '../../services/slices/feeds-slice';
 import { useSelector, useDispatch } from '../../services/store';
 import {
+  selectIngredientsLoading,
+  selectIngredientsLoaded
+} from '../../services/selectors/ingredients-selector';
+import { fetchIngredients } from '../../services/slices/ingredients-slice';
+import {
   selectFeedsOrders,
-  selectFeedsLoading,
-  selectFeedsLoaded,
-  selectFeedsError
+  selectFeedsLoading
 } from '../../services/selectors/feeds-selector';
-export const Feed: FC = () => {
-  /** TODO: взять переменную из стора */
-  //const orders: TOrder[] = [];
+import { fetchFeeds } from '../../services/slices/feeds-slice';
 
-  const orders: TOrder[] = useSelector(selectFeedsOrders);
-  //const total = feeds.total;
-  //const totalToday = feeds.totalToday;
-  const isLoading = useSelector(selectFeedsLoading);
-  const feedsLoaded = useSelector(selectFeedsLoaded);
-  //const error = useSelector(selectFeedsError);
+export const Feed: FC = () => {
   const dispatch = useDispatch();
+  const orders: TOrder[] = useSelector(selectFeedsOrders);
+  const isIngredientsLoading = useSelector(selectIngredientsLoading);
+
+  const loaded = useSelector(selectIngredientsLoaded);
 
   useEffect(() => {
-    //if (!feedsLoaded) {
-    dispatch(fetchFeeds());
-    // }
-    //}, [feedsLoaded, dispatch]);
-  }, []);
+    if (!loaded) {
+      dispatch(fetchIngredients());
+    }
+  }, [loaded, dispatch]);
 
-  console.log('Feed:', orders);
+  const isFeedsLoading = useSelector(selectFeedsLoading);
+
+  useEffect(() => {
+    dispatch(fetchFeeds());
+  }, []);
 
   if (!orders.length) {
     return <Preloader />;
   }
-  if (isLoading) {
+  if (isFeedsLoading) {
     return <Preloader />;
   }
-  //<FeedUI orders={orders} handleGetFeeds={() => {}} />;
+  if (isIngredientsLoading) {
+    return <Preloader />;
+  }
 
   return (
     <FeedUI

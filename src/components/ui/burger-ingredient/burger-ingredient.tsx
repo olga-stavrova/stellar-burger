@@ -14,8 +14,6 @@ export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
   ({ ingredient, count, handleAdd, locationState }) => {
     const { image, price, name, _id } = ingredient;
 
-    //console.log('BurgerIngredientUI:', ingredient);
-
     return (
       <li className={styles.container}>
         <Link

@@ -10,7 +10,6 @@ const rootReducer = combineReducers({
   [feedsSlice.name]: feedsSlice.reducer,
   [userSlice.name]: userSlice.reducer,
   [orderSlice.name]: orderSlice.reducer
-  //другие редьюсеры здесь
 });
 
 export default rootReducer;

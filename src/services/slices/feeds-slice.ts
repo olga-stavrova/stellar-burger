@@ -8,7 +8,7 @@ interface FeedsState {
   loaded: boolean;
   error: string | null;
 }
-// Define the initial state of the ingredients slice
+
 const initialFeedsState: FeedsState = {
   feeds: {
     orders: [],
@@ -20,7 +20,6 @@ const initialFeedsState: FeedsState = {
   error: null
 };
 
-// Create an async thunk for fetching ingredients
 export const fetchFeeds = createAsyncThunk(
   'orders/fetchFeeds',
   async (_, { rejectWithValue }) => {
@@ -33,7 +32,6 @@ export const fetchFeeds = createAsyncThunk(
   }
 );
 
-// Create the ingredients slice
 export const feedsSlice = createSlice({
   name: 'feeds',
   initialState: initialFeedsState,
@@ -43,7 +41,6 @@ export const feedsSlice = createSlice({
       .addCase(fetchFeeds.pending, (state) => {
         state.loading = true;
         state.loaded = false;
-        console.log('fetchFeeds.pending');
       })
       .addCase(
         fetchFeeds.fulfilled,
@@ -52,17 +49,13 @@ export const feedsSlice = createSlice({
           state.loading = false;
           state.loaded = true;
           state.error = null;
-          console.log('fetchFeeds.fulfilled', action);
         }
       )
       .addCase(fetchFeeds.rejected, (state, action) => {
-        console.log('fetchFeeds.rejected', action);
         state = initialFeedsState;
         state.error = JSON.stringify(action.payload as string);
-        console.log('fetchFeeds.rejected', action);
       });
   }
 });
 
-// Export the reducer from the slice
 export default feedsSlice.reducer;
