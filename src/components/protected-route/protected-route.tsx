@@ -3,6 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import {
   selectGetUser,
   selectUserLoading,
+  selectIsAuthChecked,
   selectUserError
 } from '../../services/selectors/user-selector';
 import { getUser } from '../../services/slices/user-slice';
@@ -20,10 +21,11 @@ export function ProtectedRoute({ children, onlyUnAuth }: ProtectedRouteProps) {
   const dispatch = useDispatch();
   const user = useSelector(selectGetUser);
   const isLoading = useSelector(selectUserLoading);
+  const isAuthChecked = useSelector(selectIsAuthChecked);
   console.log('ProtectedRoute:', user, isLoading);
   useEffect(() => {
     dispatch(getUser());
-  }, []);
+  }, [isAuthChecked, dispatch]);
 
   if (isLoading) {
     console.log('Wait user checkout');

@@ -6,3 +6,19 @@ export const selectOrderItems = createSelector(
   [selectOrderState],
   (orderState) => orderState.orderItems
 );
+export const selectOrderData = createSelector(
+  [selectOrderState],
+  (orderState) => orderState.orderData
+);
+export const selectUserOrders = createSelector(
+  [selectOrderState],
+  (orderState) => orderState.userOrders
+);
+export const selectUserOrdersLoading = createSelector(
+  [selectOrderState],
+  (userOrdersState) => userOrdersState.isLoading
+);
+export const selectUserOrderRequest = createSelector(
+  [selectOrderState],
+  (userOrdersState) => userOrdersState.orderRequest
+);

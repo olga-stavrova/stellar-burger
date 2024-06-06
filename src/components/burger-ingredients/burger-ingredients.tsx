@@ -20,15 +20,15 @@ export const BurgerIngredients: FC = () => {
   //const sauces: TIngredient[] = [];
 
   const ingredients: TIngredient[] = useSelector(selectAllIngredients);
-  const loaded = useSelector(selectIngredientsLoaded);
+  const areIngredientsLoaded = useSelector(selectIngredientsLoaded);
   //const error = useSelector(selectFeedsError);
   /**/
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!loaded) {
+    if (!areIngredientsLoaded) {
       dispatch(fetchIngredients());
     }
-  }, [loaded, dispatch]);
+  }, [areIngredientsLoaded, dispatch]);
   /**/
   //console.log('BurgerIngredients:', ingredients);
   const buns: TIngredient[] = ingredients.filter(

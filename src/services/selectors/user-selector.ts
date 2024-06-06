@@ -21,5 +21,6 @@ export const selectGetUser = createSelector(
 );
 export const selectIsAuthChecked = createSelector(
   [selectUserState],
-  (state) => state.user?.success
+  //(state) => state.auth?.success
+  (state) => (state.auth ? true : false)
 );

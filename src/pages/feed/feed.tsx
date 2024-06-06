@@ -22,25 +22,34 @@ export const Feed: FC = () => {
   const orders: TOrder[] = useSelector(selectFeedsOrders);
   //const total = feeds.total;
   //const totalToday = feeds.totalToday;
-  const loading = useSelector(selectFeedsLoading);
-  const loaded = useSelector(selectFeedsLoaded);
+  const isLoading = useSelector(selectFeedsLoading);
+  const feedsLoaded = useSelector(selectFeedsLoaded);
   //const error = useSelector(selectFeedsError);
   const dispatch = useDispatch();
+
   useEffect(() => {
-    if (!loaded) {
-      dispatch(fetchFeeds());
-    }
-  }, [loaded, dispatch]);
+    //if (!feedsLoaded) {
+    dispatch(fetchFeeds());
+    // }
+    //}, [feedsLoaded, dispatch]);
+  }, []);
 
   console.log('Feed:', orders);
 
   if (!orders.length) {
     return <Preloader />;
   }
-  if (loading) {
+  if (isLoading) {
     return <Preloader />;
   }
   //<FeedUI orders={orders} handleGetFeeds={() => {}} />;
 
-  return <FeedUI orders={orders} handleGetFeeds={() => {}} />;
+  return (
+    <FeedUI
+      orders={orders}
+      handleGetFeeds={() => {
+        dispatch(fetchFeeds());
+      }}
+    />
+  );
 };

@@ -3,7 +3,6 @@ import { FC } from 'react';
 import { TOrder } from '@utils-types';
 import { FeedInfoUI } from '../ui/feed-info';
 
-//import { RootState, AppDispatch } from '../../services/store';
 import { useEffect } from 'react';
 import { fetchFeeds } from '../../services/slices/feeds-slice';
 import { useSelector, useDispatch } from '../../services/store';
@@ -28,16 +27,18 @@ export const FeedInfo: FC = () => {
     totalToday: useSelector(selectFeedsTotalToday)
   };
   const orders: TOrder[] = useSelector(selectFeedsOrders);
-  const loaded = useSelector(selectFeedsLoaded);
-  //const error = useSelector(selectFeedsError);
-  /** */
+  /*
+  const feedsLoaded = useSelector(selectFeedsLoaded);
+
   const dispatch = useDispatch();
+
   useEffect(() => {
-    if (!loaded) {
+    if (!feedsLoaded) {
+      console.log('fetching feeds...');
       dispatch(fetchFeeds());
     }
-  }, [loaded, dispatch]);
-  /**/
+  }, [feedsLoaded, dispatch]);
+*/
   const readyOrders = getOrders(orders, 'done');
 
   const pendingOrders = getOrders(orders, 'pending');

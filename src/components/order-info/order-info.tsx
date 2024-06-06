@@ -1,12 +1,13 @@
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useEffect } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient, TOrder } from '@utils-types';
 
 import { useParams } from 'react-router-dom';
 import { selectAllIngredients } from '../../services/selectors/ingredients-selector';
-import { selectFeedsOrders } from '../../services/selectors/feeds-selector';
-import { useSelector } from '../../services/store';
+import { selectUserOrders } from '../../services/selectors/order-selector';
+//import { selectFeedsOrders } from '../../services/selectors/feeds-selector';
+import { useSelector, useDispatch } from '../../services/store';
 
 export const OrderInfo: FC = () => {
   /** TODO: взять переменные orderData и ingredients из стора */
@@ -23,9 +24,10 @@ export const OrderInfo: FC = () => {
   */
   const { selectedId } = useParams();
 
-  const orders: TOrder[] = useSelector(selectFeedsOrders);
+  //const orders: TOrder[] = useSelector(selectFeedsOrders);
+  const orders = useSelector(selectUserOrders);
 
-  const orderData = orders.find(
+  const orderData = orders?.find(
     (order: TOrder) => order.number.toString() === selectedId
   );
 

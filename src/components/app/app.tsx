@@ -32,12 +32,10 @@ import {
   selectGetUser
 } from '../../services/selectors/user-selector';
 import { getUser } from '../../services/slices/user-slice';
-import {
-  selectAllIngredients,
-  selectIngredientsLoaded
-} from '../../services/selectors/ingredients-selector';
+import { selectIngredientsLoaded } from '../../services/selectors/ingredients-selector';
+import { selectFeedsLoaded } from '../../services/selectors/feeds-selector';
 import { fetchIngredients } from '../../services/slices/ingredients-slice';
-import { TIngredient } from '@utils-types';
+import { fetchFeeds } from '../../services/slices/feeds-slice';
 
 import { useSelector, useDispatch } from '../../services/store';
 
@@ -51,23 +49,27 @@ const App1 = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    //if (!isAuthChecked) {
-    dispatch(getUser());
-    //}
+    if (!isAuthChecked) {
+      dispatch(getUser());
+    }
   }, [isAuthChecked, dispatch]);
-  const ingredients: TIngredient[] = useSelector(selectAllIngredients);
-  const loaded = useSelector(selectIngredientsLoaded);
-  //const error = useSelector(selectFeedsError);
-  /*
+
+  const areIngredientsLoaded = useSelector(selectIngredientsLoaded);
+
   useEffect(() => {
-    if (!loaded) {
+    if (!areIngredientsLoaded) {
       dispatch(fetchIngredients());
     }
-  }, [loaded, dispatch]);
-*/
-  if (!loaded) {
-    dispatch(fetchIngredients());
-  }
+  }, [areIngredientsLoaded, dispatch]);
+
+  const areFeedsLoaded = useSelector(selectFeedsLoaded);
+
+  useEffect(() => {
+    if (!areFeedsLoaded) {
+      dispatch(fetchFeeds());
+    }
+  }, [areFeedsLoaded, dispatch]);
+
   return (
     <div className={styles.app}>
       <AppHeader />

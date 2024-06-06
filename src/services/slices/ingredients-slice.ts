@@ -38,6 +38,7 @@ export const ingredientsSlice = createSlice({
     builder
       .addCase(fetchIngredients.pending, (state) => {
         state.loading = true;
+        state.loaded = false;
       })
       .addCase(
         fetchIngredients.fulfilled,
@@ -51,6 +52,7 @@ export const ingredientsSlice = createSlice({
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.error = action.payload as string;
         state.loading = false;
+        state.loaded = false;
       });
   }
 });

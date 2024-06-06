@@ -42,6 +42,8 @@ export const feedsSlice = createSlice({
     builder
       .addCase(fetchFeeds.pending, (state) => {
         state.loading = true;
+        state.loaded = false;
+        console.log('fetchFeeds.pending');
       })
       .addCase(
         fetchFeeds.fulfilled,
@@ -50,11 +52,14 @@ export const feedsSlice = createSlice({
           state.loading = false;
           state.loaded = true;
           state.error = null;
+          console.log('fetchFeeds.fulfilled', action);
         }
       )
       .addCase(fetchFeeds.rejected, (state, action) => {
-        state.error = action.payload as string;
-        state.loading = false;
+        console.log('fetchFeeds.rejected', action);
+        state = initialFeedsState;
+        state.error = JSON.stringify(action.payload as string);
+        console.log('fetchFeeds.rejected', action);
       });
   }
 });

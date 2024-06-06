@@ -9,10 +9,12 @@ import {
   registerUserApi,
   getUserApi,
   updateUserApi,
-  logoutApi
+  logoutApi,
+  refreshToken
 } from '../../utils/burger-api';
-import { TUser } from '@utils-types';
+
 import { setCookie } from '../../utils/cookie';
+import { access } from 'fs';
 
 export interface UserState {
   auth: TAuthResponse | null;
@@ -92,16 +94,22 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    /*
     resetUser: (state) => {
+      setCookie('accessToken', '');
+      //setCookie('refreshToken', '');
+      localStorage.setItem(
+        'refreshToken',
+        state.auth ? state.auth.refreshToken : ''
+      );
       state.auth = null;
       state.user = null;
       state.accept = false;
       state.isLoading = false;
       state.error = false;
       state.errorMessage = null;
-      setCookie('accessToken', '');
-      setCookie('refreshToken', '');
     }
+    */
     // Other reducers can be added here
   },
   extraReducers: (builder) => {
@@ -124,7 +132,7 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.error = true;
         state.errorMessage = action.payload as string;
-        console.log('registerUser.rejected', state.errorMessage);
+        console.log('registerUser.rejected', action, state.errorMessage);
       })
       .addCase(updateUser.pending, (state) => {
         state.isLoading = true;
@@ -144,7 +152,7 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.error = true;
         state.errorMessage = action.payload as string;
-        console.log('updateUser.rejected', state.errorMessage);
+        console.log('updateUser.rejected', action, state.errorMessage);
       })
       .addCase(getUser.pending, (state) => {
         state.isLoading = true;
@@ -163,8 +171,20 @@ export const userSlice = createSlice({
       .addCase(getUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = true;
-        state.errorMessage = action.payload as string;
-        console.log('getUser.rejected', state.errorMessage);
+        state.auth = {
+          success: false,
+          user: { email: '', name: '' },
+          refreshToken: '',
+          accessToken: ''
+        };
+        //const { success, message }: { success?: boolean; message?: string } =
+        //  action.payload as { success?: boolean; message?: string };
+        //state.errorMessage = message ? message : 'Unknown error'; //action.payload as string;
+        //state.error = !success;
+        //state.errorMessage = (action.payload as string).toString();
+        state.errorMessage = JSON.stringify(action.payload);
+        state.error = true;
+        console.log('getUser.rejected', action, state.errorMessage);
       })
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
@@ -174,19 +194,20 @@ export const userSlice = createSlice({
         (state, action: PayloadAction<TAuthResponse>) => {
           state.auth = action.payload;
           setCookie('accessToken', state.auth.accessToken);
-          setCookie('refreshToken', state.auth.refreshToken);
+          localStorage.setItem('refreshToken', state.auth.refreshToken);
+          //setCookie('refreshToken', state.auth.refreshToken);
           state.accept = true;
           state.isLoading = false;
           state.error = false;
           state.errorMessage = null;
-          console.log('loginUser.fulfilled', state.auth);
+          console.log('loginUser.fulfilled', action, state.auth);
         }
       )
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = true;
         state.errorMessage = action.payload as string;
-        console.log('loginUser.rejected', state.errorMessage);
+        console.log('loginUser.rejected', action, state.errorMessage);
       })
       .addCase(logoutUser.pending, (state) => {
         state.isLoading = true;
@@ -199,7 +220,7 @@ export const userSlice = createSlice({
         state.error = false;
         state.errorMessage = null;
         setCookie('accessToken', '');
-        setCookie('refreshToken', '');
+        localStorage.setItem('refreshToken', '');
         console.log('logoutUser.fulfilled', action.payload);
       })
       .addCase(logoutUser.rejected, (state, action) => {
