@@ -19,7 +19,7 @@ const initialFeedsState: FeedsState = {
   loading: false,
   error: null
 };
-
+/*
 export const fetchFeeds = createAsyncThunk(
   'orders/fetchFeeds',
   async (_, { rejectWithValue }) => {
@@ -31,7 +31,14 @@ export const fetchFeeds = createAsyncThunk(
     }
   }
 );
-
+*/
+export const fetchFeeds = createAsyncThunk(
+  'orders/fetchFeeds',
+  async (_, thunkAPI) => {
+    const result = await getFeedsApi();
+    return result;
+  }
+);
 export const feedsSlice = createSlice({
   name: 'feeds',
   initialState: initialFeedsState,

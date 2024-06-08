@@ -6,7 +6,8 @@ import {
   TNewOrderResponse,
   TOrderResponse
 } from '../../utils/burger-api';
-import { TConstructorIngredient, TOrder } from '../../utils/types';
+import { TConstructorIngredient, TIngredient, TOrder } from '../../utils/types';
+import { v4 as uuidv4 } from 'uuid';
 
 interface OrderState {
   orderData: TOrder | null;
@@ -38,51 +39,44 @@ const initialState: OrderState = {
 
 export const getUserOrders = createAsyncThunk(
   'orderState/getUserOrders',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await getOrdersApi();
-      return response;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
+  async (_, thunkAPI) => {
+    const response = await getOrdersApi();
+    return response;
   }
 );
 export const getOrderByNumber = createAsyncThunk(
   'orderState/getOrderByNumber',
-  async (orderNumber: number, { rejectWithValue }) => {
-    try {
-      const response = await getOrderByNumberApi(orderNumber);
-      return response;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
+  async (orderNumber: number, thunkAPI) => {
+    const response = await getOrderByNumberApi(orderNumber);
+    return response;
   }
 );
 export const addUserOrder = createAsyncThunk(
   'orderState/addUserOrder',
-  async (items: string[], { rejectWithValue }) => {
-    try {
-      const response = await orderBurgerApi(items);
-      return response;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
+  async (items: string[], thunkAPI) => {
+    const response = await orderBurgerApi(items);
+    return response;
   }
 );
 export const orderSlice = createSlice({
   name: 'orderState',
   initialState,
   reducers: {
-    addItem(state, action) {
-      if (action.payload.type === 'bun') {
-        state.orderItems.bun = action.payload;
-      } else {
-        state.orderItems.items.push(action.payload);
-      }
+    addItem: {
+      reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
+        if (action.payload.type === 'bun') {
+          state.orderItems.bun = action.payload;
+        } else {
+          state.orderItems.items.push(action.payload);
+        }
+      },
+      prepare: (ingredient: TIngredient) => ({
+        payload: { ...ingredient, id: uuidv4() }
+      })
     },
-    removeItem(state, action) {
+    removeItem(state, action: PayloadAction<TConstructorIngredient>) {
       const index = state.orderItems.items.findIndex(
-        (item) => item._id === action.payload.ingredient._id
+        (item) => item.id === action.payload.id
       );
       if (index !== -1) {
         state.orderItems.items.splice(index, 1);

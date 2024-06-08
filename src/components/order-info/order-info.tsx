@@ -3,31 +3,49 @@ import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient, TOrder } from '@utils-types';
 
-import { useParams } from 'react-router-dom';
-import { selectAllIngredients } from '../../services/selectors/ingredients-selector';
+import { useParams, useLocation } from 'react-router-dom';
+import {
+  selectAllIngredients,
+  selectIngredientsLoaded
+} from '../../services/selectors/ingredients-selector';
 import { selectFeedsOrders } from '../../services/selectors/feeds-selector';
-import { selectFeedsLoaded } from '../../services/selectors/feeds-selector';
+import { selectUserOrders } from '../../services/selectors/order-selector';
+import { fetchIngredients } from '../../services/slices/ingredients-slice';
+import { getUserOrders } from '../../services/slices/order-slice';
 import { fetchFeeds } from '../../services/slices/feeds-slice';
 import { useSelector, useDispatch } from '../../services/store';
 
 export const OrderInfo: FC = () => {
   const { selectedId } = useParams();
+  const location = useLocation();
+  const userOrders = useSelector(selectUserOrders);
+  const feedOrders: TOrder[] = useSelector(selectFeedsOrders);
+
   const dispatch = useDispatch();
-
-  const orders: TOrder[] = useSelector(selectFeedsOrders);
-
-  const areFeedsLoaded = useSelector(selectFeedsLoaded);
   useEffect(() => {
-    if (!areFeedsLoaded) {
-      dispatch(fetchFeeds());
-    }
-  }, [areFeedsLoaded, dispatch]);
+    dispatch(getUserOrders());
+  }, []);
+
+  useEffect(() => {
+    dispatch(fetchFeeds());
+  }, []);
+
+  const orders = location.pathname.startsWith('/profile/orders')
+    ? userOrders
+    : feedOrders;
 
   const orderData = orders?.find(
     (order: TOrder) => order.number.toString() === selectedId
   );
 
   const ingredients: TIngredient[] = useSelector(selectAllIngredients);
+  const areIngredientsLoaded = useSelector(selectIngredientsLoaded);
+
+  useEffect(() => {
+    if (!areIngredientsLoaded) {
+      dispatch(fetchIngredients());
+    }
+  }, [areIngredientsLoaded, dispatch]);
 
   const orderInfo = useMemo(() => {
     if (!orderData || !ingredients.length) return null;

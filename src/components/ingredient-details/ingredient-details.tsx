@@ -1,14 +1,27 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Preloader } from '../ui/preloader';
 import { IngredientDetailsUI } from '../ui/ingredient-details';
 import { useParams } from 'react-router-dom';
 
 import { TIngredient } from '@utils-types';
-import { selectAllIngredients } from '../../services/selectors/ingredients-selector';
+import {
+  selectAllIngredients,
+  selectIngredientsLoaded
+} from '../../services/selectors/ingredients-selector';
+import { fetchIngredients } from '../../services/slices/ingredients-slice';
 
-import { useSelector } from '../../services/store';
+import { useSelector, useDispatch } from '../../services/store';
+
 export const IngredientDetails: FC = () => {
   const ingredients: TIngredient[] = useSelector(selectAllIngredients);
+  const areIngredientsLoaded = useSelector(selectIngredientsLoaded);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!areIngredientsLoaded) {
+      dispatch(fetchIngredients());
+    }
+  }, [areIngredientsLoaded, dispatch]);
 
   const { selectedId } = useParams();
 

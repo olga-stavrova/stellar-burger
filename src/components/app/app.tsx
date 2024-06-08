@@ -4,6 +4,7 @@ import {
   BrowserRouter,
   Routes,
   Route,
+  Outlet,
   useNavigate,
   useLocation
 } from 'react-router-dom';
@@ -21,19 +22,28 @@ import { Feed } from '@pages';
 import { OrderInfo } from '../order-info/order-info';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { NotFound404 } from '@pages';
-import { Modal } from '../modal/modal';
+import { ModalLayout } from '../modal/modal';
 import { ProtectedRoute } from '../protected-route/protected-route';
 
 const App1 = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const state = location.state;
+  const backgroundLocation =
+    location.state && location.state.backgroundLocation;
 
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes location={state?.backgroundLocation || location}>
-        <Route path='/' element={<ConstructorPage />} />
+      <Routes>
+        <Route
+          path='/'
+          element={
+            <>
+              <ConstructorPage />
+              <Outlet />
+            </>
+          }
+        />
         <Route path='/feed' element={<Feed />} />
 
         <Route
@@ -93,17 +103,24 @@ const App1 = () => {
         <Route
           path='/feed/:selectedId'
           element={
-            <Modal title='' onClose={() => navigate(-1)}>
+            <ModalLayout
+              title=''
+              onClose={() => navigate(backgroundLocation || '/feed')}
+            >
               <OrderInfo />
-            </Modal>
+            </ModalLayout>
           }
         />
+
         <Route
           path='/ingredients/:selectedId'
           element={
-            <Modal title='' onClose={() => navigate(-1)}>
+            <ModalLayout
+              title=''
+              onClose={() => navigate(backgroundLocation || '/')}
+            >
               <IngredientDetails />
-            </Modal>
+            </ModalLayout>
           }
         />
 
@@ -111,9 +128,14 @@ const App1 = () => {
           path='/profile/orders/:selectedId'
           element={
             <ProtectedRoute>
-              <Modal title='' onClose={() => navigate(-1)}>
+              <ModalLayout
+                title=''
+                onClose={() =>
+                  navigate(backgroundLocation || '/profile/orders')
+                }
+              >
                 <OrderInfo />
-              </Modal>
+              </ModalLayout>
             </ProtectedRoute>
           }
         />

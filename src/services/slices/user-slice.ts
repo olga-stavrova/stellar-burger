@@ -33,59 +33,36 @@ const initialState: UserState = {
 
 export const loginUser = createAsyncThunk(
   'user/loginUser',
-  async (userData: TLoginData, { rejectWithValue }) => {
-    try {
-      const response = await loginUserApi(userData);
-      return response;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
+  async (userData: TLoginData, thunkAPI) => {
+    const response = await loginUserApi(userData);
+    return response;
   }
 );
 export const logoutUser = createAsyncThunk(
   'user/logoutUser',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await logoutApi();
-      return response;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
+  async (_, thunkAPI) => {
+    const response = await logoutApi();
+    return response;
   }
 );
 export const registerUser = createAsyncThunk(
   'user/registerUser',
-  async (userData: TRegisterData, { rejectWithValue }) => {
-    try {
-      const response = await registerUserApi(userData);
-      return response;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
+  async (userData: TRegisterData, thunkAPI) => {
+    const response = await registerUserApi(userData);
+    return response;
   }
 );
 export const updateUser = createAsyncThunk(
   'user/updateUser',
-  async (userData: TRegisterData, { rejectWithValue }) => {
-    try {
-      const response = await updateUserApi(userData);
-      return response;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
+  async (userData: TRegisterData, thunkAPI) => {
+    const response = await updateUserApi(userData);
+    return response;
   }
 );
-export const getUser = createAsyncThunk(
-  'user/getUser',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await getUserApi();
-      return response;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  }
-);
+export const getUser = createAsyncThunk('user/getUser', async (_, thunkAPI) => {
+  const response = await getUserApi();
+  return response;
+});
 export const userSlice = createSlice({
   name: 'user',
   initialState,
