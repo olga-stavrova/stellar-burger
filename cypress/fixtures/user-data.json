@@ -1,0 +1,6 @@
+{
+  "success": true,
+  "accessToken": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NjFiYzk5OTdlZGUwMDAxZDA2ZjA5MCIsImlhdCI6MTcxODQ2NTYyMiwiZXhwIjoxNzE4NDY2ODIyfQ.KyvCh4OwCkuMbZ2Zlm4_pNUp7MiC0A9iiyeflbNM7Io",
+  "refreshToken": "3105c11d42756b70ca9ace02fadf9c1a89cec37432083aa5fbaed866d1c92fbffaa941fb86465a29",
+  "user": { "email": "oo@dd.zz", "name": "Olala" }
+}

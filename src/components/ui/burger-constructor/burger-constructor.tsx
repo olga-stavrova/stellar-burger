@@ -28,12 +28,13 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
           price={constructorItems.bun.price}
           thumbnail={constructorItems.bun.image}
         />
+        <div cypress-test='bun-top-filled' />
       </div>
     ) : (
       <div
         className={`${styles.noBuns} ${styles.noBunsTop} ml-8 mb-4 mr-5 text text_type_main-default`}
       >
-        Выберите булки
+        <div cypress-test='bun-top'>Выберите булки</div>
       </div>
     )}
     <ul className={styles.elements}>
@@ -52,7 +53,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         <div
           className={`${styles.noBuns} ml-8 mb-4 mr-5 text text_type_main-default`}
         >
-          Выберите начинку
+          <div cypress-test='ingredients-container'>Выберите начинку</div>
         </div>
       )}
     </ul>
@@ -65,12 +66,13 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
           price={constructorItems.bun.price}
           thumbnail={constructorItems.bun.image}
         />
+        <div cypress-test='bun-bottom-filled' />
       </div>
     ) : (
       <div
         className={`${styles.noBuns} ${styles.noBunsBottom} ml-8 mb-4 mr-5 text text_type_main-default`}
       >
-        Выберите булки
+        <div cypress-test='bun-bottom'>Выберите булки</div>
       </div>
     )}
     <div className={`${styles.total} mt-10 mr-4`}>
@@ -78,13 +80,15 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         <p className={`text ${styles.text} mr-2`}>{price}</p>
         <CurrencyIcon type='primary' />
       </div>
-      <Button
-        htmlType='button'
-        type='primary'
-        size='large'
-        children='Оформить заказ'
-        onClick={onOrderClick}
-      />
+      <div cypress-test='make-order-button-container'>
+        <Button
+          htmlType='button'
+          type='primary'
+          size='large'
+          children='Оформить заказ'
+          onClick={onOrderClick}
+        />
+      </div>
     </div>
 
     {orderRequest && (

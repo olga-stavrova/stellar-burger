@@ -19,19 +19,7 @@ const initialFeedsState: FeedsState = {
   loading: false,
   error: null
 };
-/*
-export const fetchFeeds = createAsyncThunk(
-  'orders/fetchFeeds',
-  async (_, { rejectWithValue }) => {
-    try {
-      const result = await getFeedsApi();
-      return result;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  }
-);
-*/
+
 export const fetchFeeds = createAsyncThunk(
   'orders/fetchFeeds',
   async (_, thunkAPI) => {
@@ -59,8 +47,11 @@ export const feedsSlice = createSlice({
         }
       )
       .addCase(fetchFeeds.rejected, (state, action) => {
-        state = initialFeedsState;
-        state.error = JSON.stringify(action.payload as string);
+        state = {
+          ...initialFeedsState,
+          error: action.payload as string
+        };
+        return state;
       });
   }
 });

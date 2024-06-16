@@ -29,6 +29,7 @@ export const BurgerConstructorElementUI: FC<BurgerConstructorElementUIProps> =
             handleClose={handleClose}
           />
         </div>
+        <div cypress-test={`ingredient-${ingredient.type}`} />
       </li>
     )
   );

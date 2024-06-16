@@ -47,17 +47,19 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
       </div>
       <div className={styles.link_position_last}>
         <ProfileIcon type={'primary'} />
-        <NavLink
-          to={userName ? '/profile' : '/login'}
-          className={({ isActive }) =>
-            `text text_type_main-default ml-2 ${
-              styles.link
-            } ${isActive ? styles.link_active : ''}`
-          }
-          end
-        >
-          {userName || 'Личный кабинет'}
-        </NavLink>
+        <div cypress-test='profile-link'>
+          <NavLink
+            to={userName ? '/profile' : '/login'}
+            className={({ isActive }) =>
+              `text text_type_main-default ml-2 ${
+                styles.link
+              } ${isActive ? styles.link_active : ''}`
+            }
+            end
+          >
+            {userName || 'Личный кабинет'}
+          </NavLink>
+        </div>
       </div>
     </nav>
   </header>
